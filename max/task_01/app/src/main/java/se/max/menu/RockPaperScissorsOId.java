@@ -1,13 +1,13 @@
+
 package se.max.menu;
 
-import java.util.*;
+import java.util.Scanner;
 
-public class RockPaperScissors {
-    public RockPaperScissors() {
+public class RockPaperScissorsOId {
+    public RockPaperScissorsOId() {
 
     }
 
-    
 
     public void play() {
         System.out.println("""
@@ -89,4 +89,6 @@ public class RockPaperScissors {
         else if (playerScore == spiderScore) {System.out.println("It was a draw! What are the odds?");}
         System.out.println("Thank you for playing my game against the spider!");
     }
+
 }
+
