@@ -2,54 +2,53 @@ package lawrence;
 
 import java.util.Random;
 import java.util.Scanner;
+import java.util.function.IntFunction;
+import java.util.function.IntPredicate;
+import java.util.function.IntSupplier;
+import java.util.function.ToIntFunction;
+import java.util.function.Consumer;
+
 
 public class Guess_number_game_refractored {
 
-    // Standard main method that calls our custom main() method
     public static void main(String[] args) {
-        main(); // Call the custom main() method
-    }
+        
+        try (Scanner scanner = new Scanner(System.in)) {
+            int maxRange = 100;
 
-    // Custom main method without parameters
-    public static void main() {
-        // Create a Scanner object to read input from the player
-        Scanner scanner = new Scanner(System.in);
+            // Suppliers & functions = functional "building blocks"
+            IntSupplier targetGenerator = () -> new Random().nextInt(maxRange) + 1; // lambda (Supplier)
+            final int targetNumber = targetGenerator.getAsInt();                    // 
 
-        // Create a Random object to generate a random number
-        Random random = new Random();
+            ToIntFunction<Integer> compareToTarget = guess -> Integer.compare(guess, targetNumber); // pure comparator
+            IntPredicate isCorrect = cmp -> cmp == 0;                                                // predicate
+            IntFunction<String> hintText = cmp -> switch (cmp) {                                     // pure mapper
+                case -1 -> "Too low! Try again.";
+                case 1  -> "Too high! Try again.";
+                default -> ""; // 0 means correct; prints a separate message then break
+            };
+            Consumer<String> printer = System.out::println; // method reference
 
-        // Set the range for the random number (1 to 100)
-        int maxRange = 100;
-        int targetNumber = random.nextInt(maxRange) + 1;
+            printer.accept("Welcome to the Number Guessing Game!");
+            printer.accept("I'm thinking of a number between 1 and " + maxRange + ".");
+            printer.accept("Can you guess what it is?");
 
-        // Initialize variables for player's guess and attempt counter
-        int playerGuess = 0;
-        int attempts = 0;
+            int attempts = 0;
 
-        System.out.println("Welcome to the Number Guessing Game!");
-        System.out.println("I'm thinking of a number between 1 and " + maxRange + ".");
-        System.out.println("Can you guess what it is?");
+            while (true) {
+                System.out.print("Enter your guess: ");
+                int playerGuess = scanner.nextInt();
+                attempts++;
 
-        // Loop until the player guesses the correct number
-        while (playerGuess != targetNumber) {
-            // Prompt the player for a guess
-            System.out.print("Enter your guess: ");
-            playerGuess = scanner.nextInt();  // Read player input
-            attempts++; // Increase the attempt counter by 1
-
-            // Check if the player's guess is correct, too low, or too high
-            if (playerGuess < targetNumber) {
-                System.out.println("Too low! Try again.");
-            } else if (playerGuess > targetNumber) {
-                System.out.println("Too high! Try again.");
-            } else {
-                // Player guessed the correct number
-                System.out.println("Congratulations! You guessed the number in " + attempts + " attempts.");
+                int cmp = compareToTarget.applyAsInt(playerGuess);
+                if (isCorrect.test(cmp)) {
+                    System.out.printf("Congratulations! You guessed the number in %d attempts.%n", attempts);
+                    break;
+                } else {
+                    printer.accept(hintText.apply(cmp));
+                }
             }
         }
-
-        // Close the scanner to prevent resource leak
-        scanner.close();
     }
 }
 
