@@ -8,7 +8,6 @@ import java.util.function.IntSupplier;
 import java.util.function.ToIntFunction;
 import java.util.function.Consumer;
 
-
 public class Guess_number_game_refractored {
 
     public static void main(String[] args) {
@@ -18,7 +17,7 @@ public class Guess_number_game_refractored {
 
             // Suppliers & functions = functional "building blocks"
             IntSupplier targetGenerator = () -> new Random().nextInt(maxRange) + 1; // lambda (Supplier)
-            final int targetNumber = targetGenerator.getAsInt();                    // 
+            final int targetNumber = targetGenerator.getAsInt();                    //
 
             ToIntFunction<Integer> compareToTarget = guess -> Integer.compare(guess, targetNumber); // pure comparator
             IntPredicate isCorrect = cmp -> cmp == 0;                                                // predicate
