@@ -1,15 +1,18 @@
 package se.max.menu;
+
 import java.util.Scanner;
 
 public class Menu {
     public Menu() {
 
     }
+
     public void run() {
+        Scanner scanner = new Scanner(System.in);
         String choice = "";
         printMenu();
         do {
-            choice = getChoice();
+            choice = getChoice(scanner);
             switch (choice) {
                 case "1":
                     Avatar.print();
@@ -34,8 +37,9 @@ public class Menu {
             }
         }
         while ((!choice.equalsIgnoreCase("q")));
-        
+        scanner.close();
     }
+
     public void printMenu() {
         System.out.println("""
                  -----------------
@@ -46,12 +50,10 @@ public class Menu {
                 | qQ) Quit
                  -----------------""");
     }
-    public String getChoice() {
-        Scanner scanner = new Scanner(System.in);
+
+    public String getChoice(Scanner scanner) {
         System.out.print("Enter your choice: ");
         String choice = scanner.nextLine();
-        System.out.println("You entered: " + choice);
-        scanner.close();
         return choice;
     }
 }
