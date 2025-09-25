@@ -9,7 +9,6 @@ public class Guess_number_game {
     public static void main(String[] args) {
         main(); // Call the custom main() method
     }
-
     // Custom main method without parameters
     public static void main() {
         // Create a Scanner object to read input from the player
@@ -47,7 +46,6 @@ public class Guess_number_game {
                 System.out.println("Congratulations! You guessed the number in " + attempts + " attempts.");
             }
         }
-
         // Close the scanner to prevent resource leak
         scanner.close();
     }
