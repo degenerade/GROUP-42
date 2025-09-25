@@ -1,20 +1,55 @@
 
 package se.max.menu;
 
-import java.util.Scanner;
+import java.util.*;
+import java.util.function.Supplier;
 
-public class RockPaperScissorsOId {
-    public RockPaperScissorsOId() {
+public class RockPaperScissorsNew {
+    private int playerScore, spiderScore;
+    public enum Move {
+        ROCK, PAPER, SCISSORS;
+        private static final Move[] VALUES = values();
+        private static final Random RANDOM = new Random();
+        public static Supplier<Move> randomMove = 
+            () -> VALUES[RANDOM.nextInt(VALUES.length)];
+    }
+    private static final Map<Move, Move> beats = Map.of(
+        Move.PAPER, Move.ROCK,
+        Move.ROCK, Move.SCISSORS,
+        Move.SCISSORS, Move.PAPER
+    );
+    private final Map<String, Runnable> actions = new HashMap<>();
 
+    public RockPaperScissorsNew() {
+        actions.put("r", () -> play(Move.ROCK, Move.randomMove.get()));
+        actions.put("p", () -> play(Move.PAPER, Move.randomMove.get()));
+        actions.put("s", () -> play(Move.SCISSORS, Move.randomMove.get()));
     }
 
-
-    public void play() {
+    public void play(Move user, Move spider) {
+        Scanner scanner = new Scanner(System.in);
         System.out.println("""
                 Welcome to a game of rock ✊, scissor ✂, paper ✋!
                 You will play against the spider🕷️  and the score will be kept.
                 """);
+        
 
+    }
+
+    private int playRound(Move user, Move spider) {
+        
+    }
+    
+    private String getChoice(Scanner scanner) {
+        System.out.println("""
+            Enter your next move: 
+        \n(Rock = r, Paper = p, Scissors = s)
+        """);
+        return scanner.nextLine();
+    }
+    /* 
+    public void play() {
+    
         String[] gameArray = {"Rock✊ ", "Paper✋ ", "Scissors✂ "};
         int playerScore = 0; int spiderScore = 0; int playerChoice = 0; int spiderChoice = 0;
         
@@ -88,7 +123,6 @@ public class RockPaperScissorsOId {
         if (playerScore < spiderScore) {System.out.println("The spider won...");}
         else if (playerScore == spiderScore) {System.out.println("It was a draw! What are the odds?");}
         System.out.println("Thank you for playing my game against the spider!");
-    }
-
+    }*/
 }
 

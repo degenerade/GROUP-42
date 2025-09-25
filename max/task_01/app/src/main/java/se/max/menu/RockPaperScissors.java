@@ -8,7 +8,6 @@ public class RockPaperScissors {
     }
 
     
-
     public void play() {
         System.out.println("""
                 Welcome to a game of rock ✊, scissor ✂, paper ✋!
