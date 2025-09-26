@@ -4,48 +4,94 @@ package se.max.menu;
 import java.util.*;
 import java.util.function.Supplier;
 
+
 public class RockPaperScissorsNew {
     private int playerScore, spiderScore;
+
     public enum Move {
         ROCK, PAPER, SCISSORS;
         private static final Move[] VALUES = values();
         private static final Random RANDOM = new Random();
+
+        // get random move each time
         public static Supplier<Move> randomMove = 
             () -> VALUES[RANDOM.nextInt(VALUES.length)];
+        
+        @Override
+        public String toString() {
+            return switch (this) {
+                case ROCK -> "Rock ✊";
+                case PAPER -> "Paper ✋";
+                case SCISSORS -> "Scissors ✂";
+            };
+        }
     }
+
+    // user beats spider if beats.get(user) == spider
     private static final Map<Move, Move> beats = Map.of(
         Move.PAPER, Move.ROCK,
         Move.ROCK, Move.SCISSORS,
         Move.SCISSORS, Move.PAPER
     );
-    private final Map<String, Runnable> actions = new HashMap<>();
 
-    public RockPaperScissorsNew() {
-        actions.put("r", () -> play(Move.ROCK, Move.randomMove.get()));
-        actions.put("p", () -> play(Move.PAPER, Move.randomMove.get()));
-        actions.put("s", () -> play(Move.SCISSORS, Move.randomMove.get()));
+    private final Map<String, Runnable> actions = new HashMap<>();
+    private final Scanner scanner;
+
+    public RockPaperScissorsNew(Scanner scanner) {
+        this.scanner = scanner;
+        actions.put("r", () -> runRound(Move.ROCK, Move.randomMove.get()));
+        actions.put("p", () -> runRound(Move.PAPER, Move.randomMove.get()));
+        actions.put("s", () -> runRound(Move.SCISSORS, Move.randomMove.get()));
     }
 
-    public void play(Move user, Move spider) {
-        Scanner scanner = new Scanner(System.in);
+    public void play() {
         System.out.println("""
                 Welcome to a game of rock ✊, scissor ✂, paper ✋!
                 You will play against the spider🕷️  and the score will be kept.
                 """);
-        
+        String choice;
+        do {
+            System.out.println("Score: You " + playerScore + " - Spider " + spiderScore);
+            choice = getChoice();
+            if (actions.containsKey(choice)) {
+                actions.get(choice).run();
+            } else if (!choice.equalsIgnoreCase("q")) {
+                System.out.println("Please enter a valid choice...");
+            }
+        } while (!choice.equalsIgnoreCase("q"));
 
+        //final results
+        System.out.println("The final score is " + playerScore + " - " + spiderScore + "!");
+        if (playerScore > spiderScore) System.out.println("You win!");
+        else if (playerScore < spiderScore) System.out.println("The spider won...");
+        else System.out.println("Its a draw? I guess you live another day...");
+    }
+
+    private void runRound(Move user, Move spider) {
+        System.out.println("You chose " + user + " and the spider chose " + spider + ".");
+        int result = playRound(user, spider);
+        if (result == 0) {
+            System.out.println("Draw! No points.");
+        } else if (result == 1) {
+            playerScore++;
+            System.out.println(user + " beats " + spider + "! You win this round.");
+        } else {
+            spiderScore++;
+            System.out.println(spider + " beats " + user + "... The spider wins this round");
+        }
     }
 
     private int playRound(Move user, Move spider) {
-        
+        if (user == spider) return 0;
+        return (beats.get(user) == spider) ? 1 : -1;
     }
     
-    private String getChoice(Scanner scanner) {
+    private String getChoice() {
         System.out.println("""
             Enter your next move: 
-        \n(Rock = r, Paper = p, Scissors = s)
-        """);
-        return scanner.nextLine();
+        (Rock = r, Paper = p, Scissors = s, Quit = q)
+        >>> """);
+        return scanner.nextLine().trim();
     }
     /* 
     public void play() {

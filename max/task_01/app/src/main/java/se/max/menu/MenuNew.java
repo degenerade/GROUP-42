@@ -5,32 +5,34 @@ import java.util.*;
 public class MenuNew {
     private final Map<String, Runnable> menuActions = new HashMap<>();
     // Hash map for menu options, storing a string and a runnable operation
-    public MenuNew() {
+    private final Scanner scanner;
+    private final Random random;
+
+    public MenuNew(Scanner scanner, Random random) {
+        this.scanner = scanner;
+        this.random = random;
+
         // putting menu options into hash map in constructor
         menuActions.put("1", Avatar::print);
         menuActions.put("2", Today::print);
         // lambda to make new game object and run it
-        menuActions.put("3", () -> new RockPaperScissors().play());
-        menuActions.put("3A", () -> new RockPaperScissors().play());
-        menuActions.put("3a", () -> new RockPaperScissors().play());
+        menuActions.put("3", () -> new RockPaperScissorsNew(scanner).play());
+        menuActions.put("3A", () -> new RockPaperScissorsNew(scanner).play());
+        menuActions.put("3a", () -> new RockPaperScissorsNew(scanner).play());
         menuActions.put("m", this::printMenu);
     }
     
     public void run() {
         printMenu();
-        try (Scanner scanner = new Scanner(System.in)) {
-            String choice;
-            while (true) {
-                choice = getChoice(scanner);
-                if (choice.equalsIgnoreCase("q")) break;
-                // exit if choice = q
-                menuActions.getOrDefault(choice, 
+        String choice;
+        do {
+            choice = getChoice();
+            if (choice.equalsIgnoreCase("q")) break;
+
+            menuActions.getOrDefault(choice,
                 () -> System.err.println("Please enter a valid choice..."))
                 .run();
-                // takes choice and runs mapped operation,
-                // if nothing is mapped to choice, prints error message
-            }
-        }
+        } while (true);
     }
 
     public void printMenu() {
@@ -44,7 +46,7 @@ public class MenuNew {
                  -----------------""");
     }
 
-    public String getChoice(Scanner scanner) {
+    public String getChoice() {
         System.out.print("Enter your choice: ");
         return scanner.nextLine();
     }
