@@ -61,14 +61,14 @@ public class RockPaperScissorsNew {
         } while (!choice.equalsIgnoreCase("q"));
 
         //final results
-        System.out.println("The final score is " + playerScore + " - " + spiderScore + "!");
+        System.out.println("\nThe final score is " + playerScore + " - " + spiderScore + "!");
         if (playerScore > spiderScore) System.out.println("You win!");
         else if (playerScore < spiderScore) System.out.println("The spider won...");
         else System.out.println("Its a draw? I guess you live another day...");
     }
 
     private void runRound(Move user, Move spider) {
-        System.out.println("You chose " + user + " and the spider chose " + spider + ".");
+        System.out.println("\nYou chose " + user + " and the spider chose " + spider + ".");
         int result = playRound(user, spider);
         if (result == 0) {
             System.out.println("Draw! No points.");
@@ -87,8 +87,8 @@ public class RockPaperScissorsNew {
     }
     
     private String getChoice() {
-        System.out.println("""
-            Enter your next move: 
+        System.out.print("""
+        \nEnter your next move: 
         (Rock = r, Paper = p, Scissors = s, Quit = q)
         >>> """);
         return scanner.nextLine().trim();

@@ -6,11 +6,9 @@ public class MenuNew {
     private final Map<String, Runnable> menuActions = new HashMap<>();
     // Hash map for menu options, storing a string and a runnable operation
     private final Scanner scanner;
-    private final Random random;
 
-    public MenuNew(Scanner scanner, Random random) {
+    public MenuNew(Scanner scanner) {
         this.scanner = scanner;
-        this.random = random;
 
         // putting menu options into hash map in constructor
         menuActions.put("1", Avatar::print);
